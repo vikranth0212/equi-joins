@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table</title>
+    <style>
+        table
+        {
+            border-collapse: collapse;
+        }
+
+        th,td
+        {
+            border: 2px solid;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <center>
+        <h1>Employee Details</h1>
+        <table border="2px" cellspacing="5px" cellpadding="5px">
+            <tr>
+
+                <th>Emp No</th>
+                <th>Emp Name</th>
+                <th>Job</th>
+                <th>MGR</th>
+                <th>Hiredate</th>
+                <th>Salary</th>
+                <th>Commision</th>
+                <th>Dept No</th>
+                <th>Dept Name</th>
+                <th>Dept Loc</th>
+              
+            </tr>
+            
+
+            {% for emp in EMO %}
+
+            <tr>
+                <td>{{emp.empno}}</td>
+                <td>{{emp.ename}}</td>
+                <td>{{emp.job}}</td>
+                <td>{{emp.mgr.empno}}</td>
+                <td>{{emp.hiredate}}</td>
+                <td>{{emp.sal}}</td>
+                <td>{{emp.comm}}</td>
+                <td>{{emp.deptno.deptno}}</td>
+                //for representing another table//
+                <td>{{emp.deptno.dname}}</td>
+                <td>{{emp.deptno.dloc}}</td>
+            </tr>
+
+            {% endfor %}
+        </table>
+    </center>
+</body>
+</html>
