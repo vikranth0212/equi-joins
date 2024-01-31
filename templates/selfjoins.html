@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=<>, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <center>
+        <table border="2px">
+            <tr>
+                <th>EName</th>
+                <th>MGR</th>
+                <th>SAL</th>
+                <th>mgr</th>
+                <th>EMPNO</th>
+            </tr>
+            {% for emo in EmpMgrObj %}
+                <tr>
+                <td> {{emo.ename}}</td>
+                <td>{{emo.mgr}}</td>
+                <td>{{emo.sal}}</td>
+                <td>{{emo.mgr.ename}}</td>
+                <td>{{emo.empno}}</td>
+                </tr>
+            {% endfor %}    
+
+        </table>
+    </center>
+</body>
+</html>

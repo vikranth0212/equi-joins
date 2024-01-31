@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from app.models import *
 # Create your views here.
+from django.db.models.functions import Length
 
 def equijoin(request):
     EMO=Emp.objects.select_related('deptno').all()
@@ -29,9 +30,7 @@ def equijoin(request):
     EMO=Emp.objects.select_related('deptno').filter(deptno__dloc='singapore')
     #print(EMO)
     #EMO=Emp.objects.select_related('deptno').filter(deptno__dname='ui/ux')
-    
-
-   
+    EMO=Emp.objects.select_related('deptno').filter(ename='barath')
     
     d={'EMO' : EMO}
     return render (request,'equijoin.html',d)
@@ -41,3 +40,37 @@ def equijoin(request):
      #same table objectname.columnname,other table objname.commoncol.colname
     #for writing a condition
     # sametable colname=value,other table commonname__colname=value 
+
+
+
+def selfjoin(request):
+    EmpMgrObj=Emp.objects.select_related('mgr').all()
+    #in html page we gave ename,mgr columns so we will get this 2 column data
+    #if we give all th we will get all column details
+    EmpMgrObj=Emp.objects.select_related('mgr').filter(ename='ramani')
+    #we gave ename with value so that record will display
+    EmpMgrObj=Emp.objects.select_related('mgr').filter(ename='yaswanth',sal__gte=5000)
+    EmpMgrObj=Emp.objects.select_related('mgr').filter(sal__gte=2000)
+    EmpMgrObj=Emp.objects.select_related('mgr').filter(mgr__ename='vicky')
+    #here vicky is mgr,who and all having vicky as mgr there details will display
+    EmpMgrObj=Emp.objects.select_related('mgr').filter(mgr__ename='yaswanth')
+    #EmpMgrObj=Emp.objects.select_related('mgr').filter(ename__mgr='barath')
+    EmpMgrObj=Emp.objects.select_related('mgr').filter(ename='ramani',sal__lte=5000)
+    #EmpMgrObj=Emp.objects.select_related('mgr').all() 
+    EmpMgrObj=Emp.objects.select_related('mgr').all().order_by(Length('ename'))
+    EmpMgrObj=Emp.objects.select_related('mgr').all().order_by(Length('ename').desc())
+    EmpMgrObj=Emp.objects.select_related('mgr').all().order_by(Length('mgr').desc())
+    EmpMgrObj=Emp.objects.select_related('mgr').all().order_by(Length('mgr'))
+    EmpMgrObj=Emp.objects.select_related('mgr').all().order_by('empno')
+    EmpMgrObj=Emp.objects.select_related('mgr').all().order_by('-empno')
+    EmpMgrObj=Emp.objects.select_related('mgr').filter(ename__startswith='v')
+    EmpMgrObj=Emp.objects.select_related('mgr').filter(ename__endswith='h')
+    
+
+
+
+
+
+
+    d={'EmpMgrObj':EmpMgrObj}
+    return render(request,'selfjoins.html',d)    
