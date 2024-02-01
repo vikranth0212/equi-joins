@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <center>
+        <h1>Multirow Subquery</h1>
+        <table border="2px" background-color="blue">
+            <tr>
+                <th>Enmame</th>
+                <th>Mgr Name</th>
+                <th>DName</th>
+                <th>Deptno</th>
+            </tr>
+            {% for emdo in emd %}
+              <tr>
+                   <td>{{emdo.ename}}</td>
+                   <td>{{emdo.mgr.ename}}</td>
+                   <td>{{emdo.deptno.dname}}</td>
+                   <th>{{emdo.deptno.deptno}}</th>
+              </tr>
+            {% endfor %}
+        </table>
+        
+    </center>
+</body>
+</html>

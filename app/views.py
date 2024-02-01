@@ -2,6 +2,7 @@ from django.shortcuts import render
 from app.models import *
 # Create your views here.
 from django.db.models.functions import Length
+from django.db.models import Q
 
 def equijoin(request):
     EMO=Emp.objects.select_related('deptno').all()
@@ -65,12 +66,45 @@ def selfjoin(request):
     EmpMgrObj=Emp.objects.select_related('mgr').all().order_by('-empno')
     EmpMgrObj=Emp.objects.select_related('mgr').filter(ename__startswith='v')
     EmpMgrObj=Emp.objects.select_related('mgr').filter(ename__endswith='h')
+    EmpMgrObj=Emp.objects.select_related('mgr').filter(ename='ramani',sal__lte=5000)
+    EmpMgrObj=Emp.objects.select_related('mgr').all()[2:6:]
+    
+    d={'EmpMgrObj':EmpMgrObj}
+    return render(request,'selfjoins.html',d)    
+
+
+#this function is related to multirow subquery
+def emp_mgr_dept(request):
+    emd=Emp.objects.select_related('deptno','mgr').all()
+
+    emd=Emp.objects.select_related('deptno','mgr').filter(deptno__dname=10)
+    emd=Emp.objects.select_related('deptno','mgr').filter(ename='Vicky')
+    emd=Emp.objects.select_related('deptno','mgr').all()[1:5:]
+    emd=Emp.objects.select_related('deptno','mgr').filter(sal__gt=4000,sal__lt=5000)
+    emd=Emp.objects.select_related('deptno','mgr').filter(ename__startswith='v')
+    emd=Emp.objects.select_related('deptno','mgr').filter(ename__endswith='h')
+    emd=Emp.objects.select_related('deptno','mgr').all().order_by(Length('ename'))
+    emd=Emp.objects.select_related('deptno','mgr').all().order_by(Length('ename').desc())
+    emd=Emp.objects.select_related('deptno','mgr').all().order_by(Length('mgr').desc())
+    emd=Emp.objects.select_related('deptno','mgr').all().order_by(Length('mgr'))
+    emd=Emp.objects.select_related('deptno','mgr').filter(ename__startswith='v')
+    emd=Emp.objects.select_related('deptno','mgr').filter(ename__endswith='h')
+    emd=Emp.objects.select_related('deptno','mgr').filter(ename='ramani',sal__lte=5000)
+    emd=Emp.objects.select_related('deptno','mgr').all()[2:6:]
+    emd=Emp.objects.select_related('deptno','mgr').filter(Q(comm=None)|Q(sal__gt=2000))
+    emd=Emp.objects.select_related('deptno','mgr').filter(Q(ename='vicky')|Q(job="developer"))
+    emd=Emp.objects.select_related('deptno','mgr').filter(Q(sal__gt=2000)|Q(hiredate__year__gte='2024'))
+    emd=Emp.objects.select_related('deptno','mgr').filter(ename='madan',deptno='20')
+    emd=Emp.objects.select_related('deptno','mgr').filter(Q(comm=0)|Q(sal__gt=5000))
+    emd=Emp.objects.select_related('deptno','mgr').filter(hiredate__year=2024,sal__gt=1000)
+    emd=Emp.objects.select_related('deptno','mgr').filter(hiredate__year__lte=2022,sal__gt=1000)
+    emd=Emp.objects.select_related('deptno','mgr').filter(mgr__ename='yaswanth')
+    emd=Emp.objects.select_related('deptno','mgr').filter(Q(mgr__ename='yaswanth')|Q(job="developer"))
+    emd=Emp.objects.select_related('deptno','mgr').filter(Q(mgr__isnull=True)|Q(job="developer")|Q(mgr__ename='yaswanth'))
+    emd=Emp.objects.select_related('deptno','mgr').filter(comm=0,mgr__ename='vicky')
     
 
 
-
-
-
-
-    d={'EmpMgrObj':EmpMgrObj}
-    return render(request,'selfjoins.html',d)    
+    d={'emd':emd}
+    return render(request,'emp_mgr_dept.html',d)  
+    #it is related to multirow subquery  
