@@ -107,4 +107,31 @@ def emp_mgr_dept(request):
 
     d={'emd':emd}
     return render(request,'emp_mgr_dept.html',d)  
-    #it is related to multirow subquery  
+    #it is related to multirow subquery ,we can take data from 2 or more tables 
+
+#here in this function there is no commom column or pk-fk relationship
+def emp_salgrade(request):
+    #here common column is not there so we are taking emp table objects as EO and 
+    #salgrade table objects as SO
+    EO=Emp.objects.all()
+    SO=Salgrade.objects.all()
+    #here all the emp,sal grade data will display
+
+    SO=Salgrade.objects.filter(grade=4)
+    #to retrive the data of employees who belongs to grade 4
+
+    EO=Emp.objects.filter(sal__range=(SO[0].losal,SO[0].hisal))
+
+    SO=Salgrade.objects.filter(grade__in=(1,3,5))
+    # to get 1,3,5 grade we are using __in like or operator in sql
+    #retrieving the data of employees who belongs to grade1,3,5
+    #grade 1,3,5 salgrade objects
+    EO=Emp.objects.none()
+    #Here we r creating empty object and then we will run for loop
+    #from salgrade multiple objects are coming so loop is mandatory
+    for sgo in SO:
+        #EO=EO|Emp.objects.filter(sal__range=(sgo.losal,sgo.hisal))
+        EO=EO|Emp.objects.filter(sal__range=(sgo.losal,sgo.hisal),ename__in=('yaswanth','vicky'))
+
+    d={'EO':EO,'SO':SO}
+    return render(request,'emp_salgrade.html',d)
